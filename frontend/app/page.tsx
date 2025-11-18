@@ -90,7 +90,8 @@ export default function Home() {
       // Get base64 image
       const imageBase64 = canvas.toDataURL('image/png');
 
-      const response = await fetch(`http://localhost:8000/predict/${selectedModel}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiUrl}/predict/${selectedModel}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -121,15 +122,16 @@ export default function Home() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[100px]"></div>
       </div>
 
-      <div className="w-full max-w-4xl glass-panel rounded-3xl p-8 sm:p-12 flex flex-col items-center gap-8 animate-fade-in">
+      <div className="w-full max-w-5xl xl:max-w-6xl glass-panel rounded-3xl p-8 sm:p-12 md:p-16 flex flex-col items-center gap-10 animate-fade-in transition-all duration-500">
 
         {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+        <div className="text-center space-y-4 relative z-10">
+          <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+          <h1 className="relative text-5xl sm:text-6xl md:text-7xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-300% animate-gradient hover:scale-105 transition-transform duration-300 cursor-default drop-shadow-[0_0_25px_rgba(168,85,247,0.4)] pb-2">
             Handwritten Digit Classifier
           </h1>
-          <p className="text-lg text-gray-400 font-medium mt-10 max-sm:mt-5">
-            created by <span className="text-white font-semibold">Omkar Chebale</span>
+          <p className="text-slate-400 text-lg sm:text-xl max-w-2xl mx-auto font-medium">
+            Draw a digit and let AI predict it with high precision
           </p>
         </div>
 
@@ -139,10 +141,11 @@ export default function Home() {
           <div className="flex flex-col gap-6 items-center">
 
             {/* Model Selector */}
-            <div className="flex bg-slate-800/50 p-1 rounded-xl border border-slate-700">
+            <div className="flex bg-slate-800/50 p-1 rounded-xl border border-slate-700" role="group" aria-label="Model Selection">
               <button
                 onClick={() => setSelectedModel('cnn')}
-                className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${selectedModel === 'cnn'
+                aria-pressed={selectedModel === 'cnn'}
+                className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:ring-blue-500 outline-none ${selectedModel === 'cnn'
                   ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25'
                   : 'text-gray-400 hover:text-white'
                   }`}
@@ -151,7 +154,8 @@ export default function Home() {
               </button>
               <button
                 onClick={() => setSelectedModel('mlp')}
-                className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${selectedModel === 'mlp'
+                aria-pressed={selectedModel === 'mlp'}
+                className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:ring-purple-500 outline-none ${selectedModel === 'mlp'
                   ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/25'
                   : 'text-gray-400 hover:text-white'
                   }`}
@@ -168,7 +172,10 @@ export default function Home() {
                   ref={canvasRef}
                   width={280}
                   height={280}
-                  className="cursor-crosshair touch-none"
+                  className="cursor-crosshair touch-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none rounded-lg"
+                  role="img"
+                  aria-label="Drawing canvas. Draw a digit from 0 to 9 here."
+                  tabIndex={0}
                   onMouseDown={startDrawing}
                   onMouseUp={stopDrawing}
                   onMouseOut={stopDrawing}
@@ -181,8 +188,9 @@ export default function Home() {
               <div className="absolute top-4 right-4 flex gap-2">
                 <button
                   onClick={clearCanvas}
-                  className="p-2 bg-slate-800/80 text-white rounded-lg hover:bg-red-500/80 transition-colors backdrop-blur-sm border border-slate-700"
+                  className="p-2 bg-slate-800/80 text-white rounded-lg hover:bg-red-500/80 transition-colors backdrop-blur-sm border border-slate-700 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
                   title="Clear Canvas"
+                  aria-label="Clear Canvas"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg>
                 </button>
@@ -192,7 +200,7 @@ export default function Home() {
             <button
               onClick={predict}
               disabled={loading}
-              className="w-full py-3 px-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg shadow-blue-500/25 transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 px-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg shadow-blue-500/25 transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:ring-blue-500 outline-none"
             >
               {loading ? 'Processing...' : 'Predict Digit'}
             </button>
@@ -233,6 +241,75 @@ export default function Home() {
 
         </div>
       </div>
-    </main>
+
+      {/* Architecture & Workflow Section */}
+      <div className="w-full max-w-6xl mt-24 px-4">
+        <div className="text-center mb-16 space-y-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white">How It Works</h2>
+          <p className="text-slate-400 max-w-2xl mx-auto">
+            A journey through the full-stack architecture powering this application.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
+          {/* Connecting Line (Desktop) */}
+          <div className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-blue-500/20 -translate-y-1/2 -z-10"></div>
+
+          {/* Step 1: Frontend */}
+          <div className="group relative bg-slate-900/40 backdrop-blur-md border border-slate-800 rounded-2xl p-8 hover:border-blue-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/10">
+            <div className="absolute -top-6 left-8 w-12 h-12 bg-slate-900 border border-slate-700 rounded-xl flex items-center justify-center text-2xl group-hover:scale-110 group-hover:border-blue-500 transition-all duration-300 shadow-xl">
+              🎨
+            </div>
+            <h3 className="text-xl font-bold text-white mt-4 mb-3 group-hover:text-blue-400 transition-colors">1. Frontend Capture</h3>
+            <p className="text-slate-400 text-sm leading-relaxed">
+              Built with <span className="text-blue-300">Next.js</span> & <span className="text-blue-300">React</span>.
+              The HTML5 Canvas API captures your stroke data in real-time. When you click predict, the canvas content is converted into a <code className="bg-slate-800 px-1 py-0.5 rounded text-xs">Base64</code> encoded string.
+            </p>
+          </div>
+
+          {/* Step 2: API & Processing */}
+          <div className="group relative bg-slate-900/40 backdrop-blur-md border border-slate-800 rounded-2xl p-8 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/10">
+            <div className="absolute -top-6 left-8 w-12 h-12 bg-slate-900 border border-slate-700 rounded-xl flex items-center justify-center text-2xl group-hover:scale-110 group-hover:border-purple-500 transition-all duration-300 shadow-xl">
+              ⚡
+            </div>
+            <h3 className="text-xl font-bold text-white mt-4 mb-3 group-hover:text-purple-400 transition-colors">2. FastAPI Backend</h3>
+            <p className="text-slate-400 text-sm leading-relaxed">
+              The request hits our high-performance <span className="text-purple-300">FastAPI</span> server.
+              We decode the image, convert it to grayscale using <span className="text-purple-300">Pillow</span>, and resize it to exactly 28x28 pixels to match the MNIST dataset format.
+            </p>
+          </div>
+
+          {/* Step 3: AI Inference */}
+          <div className="group relative bg-slate-900/40 backdrop-blur-md border border-slate-800 rounded-2xl p-8 hover:border-green-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-green-500/10">
+            <div className="absolute -top-6 left-8 w-12 h-12 bg-slate-900 border border-slate-700 rounded-xl flex items-center justify-center text-2xl group-hover:scale-110 group-hover:border-green-500 transition-all duration-300 shadow-xl">
+              🧠
+            </div>
+            <h3 className="text-xl font-bold text-white mt-4 mb-3 group-hover:text-green-400 transition-colors">3. Model Inference</h3>
+            <p className="text-400 text-sm leading-relaxed">
+              The processed matrix is fed into <span className="text-green-300">TensorFlow</span>.
+              Depending on your choice, either the <span className="text-white font-semibold">CNN</span> (for spatial patterns) or <span className="text-white font-semibold">MLP</span> (dense layers) predicts the digit and calculates confidence.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="mt-24 mb-8 text-center">
+        <a
+          href="https://www.google.com/search?q=Onkar+Chebale"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-slate-900/50 border border-slate-800 hover:border-blue-500/50 hover:bg-slate-800/50 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:ring-blue-500 outline-none"
+        >
+          <span className="text-slate-400 group-hover:text-white transition-colors">Created by</span>
+          <span className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 group-hover:from-blue-300 group-hover:to-purple-300">
+            Omkar Chebale
+          </span>
+          <svg className="w-4 h-4 text-slate-500 group-hover:text-white transition-colors transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+      </footer>
+    </main >
   );
 }

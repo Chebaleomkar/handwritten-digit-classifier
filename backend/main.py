@@ -23,8 +23,7 @@ app.add_middleware(
 
 # load model metadata (model_info.json)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(BASE_DIR)
-MODEL_META_PATH = os.path.join(PROJECT_ROOT, "backend", "model_info.json")
+MODEL_META_PATH = os.path.join(BASE_DIR, "model_info.json")
 
 print(f"Loading model metadata from: {MODEL_META_PATH}")
 try:
@@ -35,7 +34,7 @@ except FileNotFoundError:
     MODEL_META = {"models": []}
 
 # load models into memory on startup
-MODEL_DIR = os.path.join(PROJECT_ROOT, "models")
+MODEL_DIR = os.path.join(BASE_DIR, "models")
 MODELS = {}
 for m in MODEL_META["models"]:
     path = os.path.join(MODEL_DIR, m["file"])
