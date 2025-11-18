@@ -1,0 +1,14 @@
+{
+    "models": [
+        {
+            "name": "cnn",
+            "file": "cnn_v1.keras",
+            "type": "keras"
+        },
+        {
+            "name": "mlp",
+            "file": "mlp_v1.keras",
+            "type": "keras"
+        }
+    ]
+}
