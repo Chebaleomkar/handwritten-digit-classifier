@@ -8,6 +8,7 @@ from io import BytesIO
 from PIL import Image
 import json     
 import os 
+from backend.custom_metrics import f1
 
 app = FastAPI(title="Handwritten Digit Recognizer")
 
@@ -40,7 +41,7 @@ for m in MODEL_META["models"]:
     path = os.path.join(MODEL_DIR, m["file"])
     print(f"Loading model: {m['name']} from {path}")
     try:
-        MODELS[m['name']] = tf.keras.models.load_model(path)
+        MODELS[m['name']] = tf.keras.models.load_model(path, custom_objects={'f1': f1})
         print(f"Successfully loaded {m['name']}")
     except Exception as e:
         print(f"Error loading {m['name']}: {e}")

@@ -128,7 +128,7 @@ export default function Home() {
           <h1 className="text-4xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
             Handwritten Digit Classifier
           </h1>
-          <p className="text-lg text-gray-400 font-medium">
+          <p className="text-lg text-gray-400 font-medium mt-10 max-sm:mt-5">
             created by <span className="text-white font-semibold">Omkar Chebale</span>
           </p>
         </div>
