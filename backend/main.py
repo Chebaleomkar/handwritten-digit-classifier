@@ -8,7 +8,7 @@ from io import BytesIO
 from PIL import Image
 import json     
 import os 
-from backend.custom_metrics import f1
+from custom_metrics import f1
 
 app = FastAPI(title="Handwritten Digit Recognizer")
 
