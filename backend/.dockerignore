@@ -1,0 +1,27 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+venv
+Venv
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypotheses
+models/*.keras
+!models/cnn_v1.keras
+!models/mlp_v1.keras
+# We might want to ignore other models if they are huge, but for now let's keep the ones we need.
+# Actually, we need models folder.

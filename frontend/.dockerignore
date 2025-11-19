@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+.next
+.git
+.coverage
+.nyc_output
+build
+dist
+.vercel
