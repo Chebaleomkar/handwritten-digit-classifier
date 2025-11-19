@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: handwritten-digit-backend
+    env: docker
+    rootDir: backend
+    plan: free
+    branch: main
+    region: oregon
+    numInstances: 1
+    healthCheckPath: /model_info
+    envVars:
+      - key: PORT
+        value: 10000
